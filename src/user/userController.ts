@@ -6,6 +6,9 @@ import bcrypt from 'bcrypt'
  * 1. Validation
  * 2. Process
  * 3. Response
+ * 4. Hash password
+ * 5. create new user in DB
+ * 6. Generate JWT token
  */
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
     const { name, email, password } = req.body;
@@ -23,9 +26,9 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
+    const newUser = await UserModel.create({ name, email, password: hashPassword });
 
-
-    res.json({ message: 'user created', name, email, password });
+    res.json({ id: newUser._id });
 }
 
 export { createUser }
