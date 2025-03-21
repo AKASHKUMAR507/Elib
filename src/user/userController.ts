@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import { UserModel } from "./userModel";
 import bcrypt from 'bcrypt'
+import { sign } from "jsonwebtoken";
+import { config } from "../config/config";
 /**
  * 1. Validation
  * 2. Process
@@ -28,7 +30,9 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
 
     const newUser = await UserModel.create({ name, email, password: hashPassword });
 
-    res.json({ id: newUser._id });
+    const token = sign({ sub: newUser._id }, config.secret as string, { expiresIn: '7d' });
+
+    res.json({ accessToken: token });
 }
 
 export { createUser }
