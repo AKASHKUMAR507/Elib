@@ -20,19 +20,27 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
         return next(error)
     }
 
-    const user = await UserModel.findOne({ email })
-    if (user) {
-        const error = createHttpError(400, 'User already exists with this email');
-        return next(error)
+    try {
+        const user = await UserModel.findOne({ email })
+        if (user) {
+            const error = createHttpError(400, 'User already exists with this email');
+            return next(error)
+        }
+    } catch (error) {
+        return next(createHttpError(500, 'Error while gating user' + error))
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await UserModel.create({ name, email, password: hashPassword });
+    try {
+        const newUser = await UserModel.create({ name, email, password: hashPassword });
+        const token = sign({ sub: newUser._id }, config.secret as string, { expiresIn: '7d' });
 
-    const token = sign({ sub: newUser._id }, config.secret as string, { expiresIn: '7d' });
+        res.json({ accessToken: token });
 
-    res.json({ accessToken: token });
+    } catch (error) {
+        return next(createHttpError(500, 'Error while creating user'))
+    }
 }
 
 export { createUser }
