@@ -5,6 +5,7 @@ import path from "node:path";
 import { BookModel } from "./bookModel";
 import fs from 'node:fs'
 import { Book } from "./bookTypes";
+import { CustomRequest } from "../middleware/authenticate";
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
     const { title, author, description, genre } = req.body;
@@ -47,12 +48,14 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
         return next(createHttpError(500, 'Error uploading book file' + error))
     }
 
+    const _req = req as CustomRequest;
+
     let newBook: Book;
     try {
         newBook = await BookModel.create({
             title,
             genre,
-            author: '67dcdfb18b641629877ced3e',
+            author: _req.userId,
             description,
             coverImage: uploadResult.secure_url,
             file: bookUploadFileResult.secure_url,
@@ -61,8 +64,6 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
         return next(createHttpError(500, 'Error creating book' + error))
     };
 
-    // @ts-ignore
-    console.log('userId', req.userId);
     // delete temp file
     try {
         await fs.promises.unlink(filePath);
