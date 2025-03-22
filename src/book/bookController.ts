@@ -61,6 +61,8 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
         return next(createHttpError(500, 'Error creating book' + error))
     };
 
+    // @ts-ignore
+    console.log('userId', req.userId);
     // delete temp file
     try {
         await fs.promises.unlink(filePath);

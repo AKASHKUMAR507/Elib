@@ -1,3 +1,4 @@
+import { Request } from "express";
 import { User } from "../user/userTypes";
 
 export interface Book {
@@ -10,4 +11,8 @@ export interface Book {
     file: string;
     createdAt: Date;
     updatedAt: Date;
+}
+
+export interface CustomRequest extends Request {
+    userId: string;
 }

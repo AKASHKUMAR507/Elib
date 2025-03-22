@@ -53,4 +53,18 @@ export default cloudinary;
     
     console.log(autoCropUrl);    
 })();
+
+useEffect(() => {
+    const ac = new AbortController();
+    const {signal} = ac;
+
+    window.addEventListener("load", handleLoad, { signal })
+    window.addEventListener("click", handleLoad, { signal })
+    window.addEventListener("scroll", handleLoad, { signal })
+    window.addEventListener("keyDown", handleLoad, { signal })
+
+    return () => {
+        ac.abort();
+    }
+}, [])
  */
