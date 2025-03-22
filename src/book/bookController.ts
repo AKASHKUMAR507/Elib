@@ -8,7 +8,7 @@ import { Book } from "./bookTypes";
 import { CustomRequest } from "../middleware/authenticate";
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
-    const { title, author, description, genre } = req.body;
+    const { title, description, genre } = req.body;
 
     if(!title || !genre) {
         return next(createHttpError(404, 'All fields are required'))
