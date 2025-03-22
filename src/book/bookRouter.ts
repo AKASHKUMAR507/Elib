@@ -7,7 +7,7 @@ const bookRouter = express.Router();
 
 const upload = multer({
     dest: path.resolve(__dirname, '../../public/data/upload'),
-    limits: { fieldSize: 3e7 }, // 3e7 = 30mb
+    limits: { fieldSize: 10 * 1024 * 1024}, // 3e7 = 30mb 
 })
 
 const fieldsData = [
@@ -15,7 +15,7 @@ const fieldsData = [
     { name: 'file', maxCount: 1 }
 ]
 
-bookRouter.post('/', upload.fields[fieldsData], createBook)
+bookRouter.post('/', upload.fields(fieldsData), createBook)
 
 
 export default bookRouter;
