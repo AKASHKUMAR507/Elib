@@ -40,7 +40,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
         res.status(201).json({ accessToken: token });
 
     } catch (error) {
-        return next(createHttpError(500, 'Error while creating user'))
+        return next(createHttpError(500, 'Error while creating user' + error))
     }
 }
 
@@ -76,7 +76,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
 
         res.json({ accessToken: token, user: filterUser })
     } catch (error) {
-        return next(createHttpError(404, 'User not found'));
+        return next(createHttpError(404, 'User not found' + error));
     }
 }
 
