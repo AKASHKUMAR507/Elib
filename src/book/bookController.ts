@@ -219,6 +219,6 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
         return next(createHttpError(500, 'Error while deleting the book from database'));
     }
 
-    res.status(200).json({ message: 'Book delete successfully' });
+    res.sendStatus(204);
 }
 export { createBook, updateBook, bookList, singleBook, userBooks, deleteBook };
