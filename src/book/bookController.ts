@@ -134,9 +134,24 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
         genre,
         coverImage: completeCoverImage ? completeCoverImage : book.coverImage,
         file: completeBook ? completeBook : book.file,
-    }, {new: true}).select("-__v");
+    }, { new: true }).select("-__v");
 
-    res.status(200).json({message: 'Book updated successfully', data: updateBook});
+    res.status(200).json({ message: 'Book updated successfully', data: updateBook });
 };
 
-export { createBook, updateBook };
+const bookList = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        // add pagination
+        const books = await BookModel.find();
+
+        if (!books) {
+            res.status(200).json({ message: `You don't have book`, data: [] })
+        }
+
+        res.status(200).json({ message: 'Book get successfully', data: books });
+    } catch (error) {
+        return next(createHttpError(500, 'Something went wrong' + error));
+    }
+};
+
+export { createBook, updateBook, bookList };
