@@ -154,4 +154,37 @@ const bookList = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-export { createBook, updateBook, bookList };
+const singleBook = async (req: Request, res: Response, next: NextFunction) => {
+    const { bookId } = req.params;
+
+    try {
+        const book = await BookModel.findOne({ _id: bookId }).select("-__v");
+
+        if (!book) {
+            return next(createHttpError(404, 'book not found'));
+        }
+
+        res.status(200).json({ message: 'Book get successfully', data: book })
+    } catch (error) {
+        return next(createHttpError(500, 'Error while gating book'));
+    }
+};
+
+const userBooks = async (req: Request, res: Response, next: NextFunction) => {
+    const _req = req as CustomRequest;
+
+    try {
+        const book = await BookModel.find({ author: _req.userId }).select("-__v");
+
+        if (!book) {
+            return next(createHttpError(404, 'book not found'));
+        }
+
+        res.status(200).json({ message: 'Book get successfully', data: book })
+    } catch (error) {
+        console.log(error)
+        return next(createHttpError(500, 'Error while gating book'));
+    }
+};
+
+export { createBook, updateBook, bookList, singleBook, userBooks };

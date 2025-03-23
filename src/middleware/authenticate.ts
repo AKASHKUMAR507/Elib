@@ -30,5 +30,5 @@ const authenticate = (req: CustomRequest, res: Response, next: NextFunction) => 
     }
 };
 
-export type { CustomRequest };
+export type { CustomRequest }
 export { authenticate };

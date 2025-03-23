@@ -1,5 +1,5 @@
 import express from 'express';
-import { bookList, createBook, updateBook } from './bookController';
+import { bookList, createBook, singleBook, updateBook, userBooks } from './bookController';
 import multer from 'multer';
 import path from 'node:path';
 import { authenticate } from '../middleware/authenticate';
@@ -19,5 +19,6 @@ const fieldsData = [
 bookRouter.post('/', authenticate, upload.fields(fieldsData), createBook);
 bookRouter.patch('/:bookId', authenticate, upload.fields(fieldsData), updateBook);
 bookRouter.get('/', bookList);
-
+bookRouter.get('/:bookId', singleBook);
+bookRouter.get('/user/books', authenticate, userBooks);
 export default bookRouter;
